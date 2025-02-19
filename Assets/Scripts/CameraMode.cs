@@ -6,10 +6,13 @@ using Cinemachine;
 public class CameraMode : MonoBehaviour
 {
     public GameObject player;
-    public PlayerMove twoDCam;
     public CinemachineVirtualCamera[] cams;
     static bool isString = false;
 
+    private void Start()
+    {
+        cams[0].Priority = 11;
+    }
     void Update()
     {
         StringModeOnOff();
@@ -39,11 +42,11 @@ public class CameraMode : MonoBehaviour
                 cams[2].Priority = 10;
             }
         }
-        if(twoDCam.hasSpawned == true)
-        {
-            cams[0].Priority = 10; 
-            cams[1].Priority = 11; 
-            cams[2].Priority = 10; 
-        }
+        //if(twoDCam.hasSpawned == true)
+        //{
+        //    cams[0].Priority = 10; 
+        //    cams[1].Priority = 11; 
+        //    cams[2].Priority = 10; 
+        //}
     }
 }

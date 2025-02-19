@@ -4,10 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Cinemachine;
 
-public class PlayerMove : MonoBehaviour , IPlayerMovement
+public class PlayerMove : MonoBehaviour 
 {
-    [SerializeField]
-    GameObject twoDwall;
     [SerializeField]
     GameObject TwoDChan;
     [SerializeField]
@@ -158,12 +156,6 @@ public class PlayerMove : MonoBehaviour , IPlayerMovement
                 //카메라 전환
                 twoDcam.LookAt = twoD.transform;
                 twoDcam.Follow = twoD.transform;
-                
-                if(other.bounds.max.x <= twoD.transform.position.x)
-                {
-                    //other.bounds.max.x -= twoD.transform.position.x;
-                }
-
 
                 Debug.Log("큐브 최대 "+other.bounds.max);
                 Debug.Log("최소 "+other.bounds.min);
@@ -171,5 +163,8 @@ public class PlayerMove : MonoBehaviour , IPlayerMovement
         }
     }
 
-   
+    public void PlayAnimation(float h, float v)
+    {
+        throw new System.NotImplementedException();
+    }
 }
