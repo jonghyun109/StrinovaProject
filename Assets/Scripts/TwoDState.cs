@@ -4,38 +4,39 @@ using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class TwoDState : IPlayerMovement
+public class TwoDState :IState
 {
-    public Transform paperTF;
-    public Animator animator;
-
-    public TwoDState(Transform transform, Animator animator)
+    PlayerState state;
+    public void EnterState(PlayerState ply)
     {
-        this.paperTF = transform;
-        this.animator = animator;
+        state.paperPlayer.SetActive(true);
     }
 
-    public void Move(Transform tra, float h, float v)
-    {
-        tra.position += (Vector3.right * h + Vector3.up * v) * Time.deltaTime * 3;
-    }
+    public void UpdateState(PlayerState ply) { }
 
-    public void PlayAnimation(float h, float v)
-    {
-        Vector3 direction = (v > 0 ? Vector3.back : Vector3.zero) +
-                            (v < 0 ? Vector3.forward : Vector3.zero) +
-                            (h < 0 ? Vector3.left : Vector3.zero) +
-                            (h > 0 ? Vector3.right : Vector3.zero);
+    public void ExitState(PlayerState ply) { }
 
-        if (direction != Vector3.zero)
+    public void Move(PlayerState ply)
+    {
+        Vector3 direction = Vector3.zero;
+        if (Input.GetKey(KeyCode.W))
         {
-            paperTF.rotation = Quaternion.LookRotation(direction);
-            animator.SetBool("IsRunning", true);
+            direction += Camera.main.transform.forward - Camera.main.transform.right;
         }
-        else
+        if (Input.GetKey(KeyCode.A))
         {
-            animator.SetBool("IsRunning", false);
-            paperTF.rotation = Quaternion.identity;
+            direction += -Camera.main.transform.forward - Camera.main.transform.right;
         }
+        if (Input.GetKey(KeyCode.S))
+        {
+            direction += -Camera.main.transform.forward + Camera.main.transform.right;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            direction += Camera.main.transform.right;
+            }
+
+        direction.y = 0;
+        ply.player.transform.position += direction.normalized * ply.moveSpeed * Time.deltaTime;
     }
 }

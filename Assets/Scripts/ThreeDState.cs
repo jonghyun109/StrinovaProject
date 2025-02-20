@@ -2,65 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThreeDState :  IPlayerMovement
+public class ThreeDState : IState
 {
-    public Transform playerTransform;
-    public Animator animator;
-
-    public ThreeDState(Transform transform, Animator animator)
+    PlayerState state;
+    public void EnterState(PlayerState ply)
     {
-        this.playerTransform = transform;
-        this.animator = animator;
+        state = ply;
+        state.moveSpeed = 2f;
+        state.moveForward = 2f;
+
+        state.moveW = Vector3.forward;
+        state.moveS = Vector3.back;
+        state.moveA = Vector3.left;
+        state.moveD = Vector3.right;
     }
 
-    public void Move(Transform transform, float h, float v)
+    public void UpdateState(PlayerState ply) { }
+
+    public void ExitState(PlayerState ply) 
     {
-        Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);
-        transform.position += moveDir.normalized * Time.deltaTime * 3;
     }
-
-    public void PlayAnimation(float h, float v)
+    public void Move(PlayerState ply)
     {
-        if (v > 0.1f)
+        Vector3 direction = Vector3.zero;
+        if (Input.GetKey(KeyCode.W))
         {
-            animator.SetBool("IsForward", true);
+            direction += Camera.main.transform.forward;
         }
-        else
+        if (Input.GetKey(KeyCode.S))
         {
-            animator.SetBool("IsForward", false);
+            direction -= Camera.main.transform.forward;
         }
-
-        if (v < -0.1f)
-        {
-            animator.SetBool("IsBackward", true);
-        }
-        else
+        if (Input.GetKey(KeyCode.A))
         { 
-            animator.SetBool("IsBackward", false);
+            direction -= Camera.main.transform.right; 
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            direction += Camera.main.transform.right;
         }
 
-        if (h > 0.1f)
-        {
-            animator.SetBool("IsRightstep", true);
-        }
-        else
-        {
-            animator.SetBool("IsRightstep", false);
-        }
-
-        if (h < -0.1f)
-        {
-            animator.SetBool("IsLeftStep", true);
-        }
-        else
-        {
-            animator.SetBool("IsLeftStep", false);
-        }
-
-        if (h == 0 && v == 0)
-        {
-            animator.SetTrigger("Idle");
-        }
+        direction.y = 0;
+        ply.player.transform.position += direction.normalized * ply.moveSpeed * Time.deltaTime;
+        
     }
-
 }

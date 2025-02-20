@@ -1,118 +1,63 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
-
-public enum CharacterMode
+public interface IState
 {
-    ThreeD,
-    TwoD,
-    StringMode,
+    public void EnterState(PlayerState ply){}
+    public void UpdateState(PlayerState ply){}
+    public void ExitState(PlayerState ply) {}
+    public void Move(PlayerState ply);
 }
 public class PlayerState : MonoBehaviour
 {
-    public CharacterMode state = CharacterMode.ThreeD;
+    //얘만 바꾸면 스크립트 바뀌게 ㄱ
+    IState currentState;
+
+    //3D플레이어 ,2D플레이어
     public GameObject player;
-    public GameObject paperPrefab;
-    public GameObject unityChan2D;
-    private GameObject paperMode;
-    public bool isWall = false;
+    public GameObject paperPlayer;
 
-    IPlayerMovement currentState;
-
-    Vector3 spawnPosition;
+    //Move(wasd)
+    public float moveSpeed;
+    public float moveForward;
+    public Vector3 moveW;
+    public Vector3 moveS;
+    public Vector3 moveA;
+    public Vector3 moveD;
+    //Animator
     public Animator anim;
-    float h;
-    float v;
+
+    //Jump(space)
+    public float jumpHeight;
+
+    //3d에서 2d ,string 에서 2d 모드 변환 할때 객체변경
+    public bool isWall = false;
 
     private void Start()
     {
-        anim = player.GetComponent<Animator>();
-        SetState(CharacterMode.ThreeD);
+        ChangeState(new ThreeDState());
     }
 
     private void Update()
     {
-        GetInput();
-        if (state == CharacterMode.TwoD && paperMode != null)
+        if (currentState != null)
         {
-            currentState.Move(paperMode.transform, h, v); // 2D 상태일 때 paperPrefab을 조작
-            currentState.PlayAnimation(h, v);
-        }
-        else
-        {
-            currentState.Move(player.transform, h, v);
-            currentState.PlayAnimation(h, v);
+            currentState.UpdateState(this);
+            currentState.Move(this);
         }
     }
 
-    private void GetInput()
+    public void ChangeState(IState newState)
     {
-        h = Input.GetAxis("Horizontal");
-        v = Input.GetAxis("Vertical");
-
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (currentState != null)
         {
-            if (state == CharacterMode.ThreeD)
-            {
-                SetState(CharacterMode.StringMode);
-            }
-            else if (state == CharacterMode.StringMode)
-            {
-                SetState(CharacterMode.ThreeD);
-            }
+            currentState.ExitState(this);
         }
-        if (state == CharacterMode.TwoD && Input.GetKeyDown(KeyCode.Space))
-        {
-            SetState(CharacterMode.ThreeD);
-        }
-        if (Input.GetKeyDown(KeyCode.E) && isWall)
-        {
-            Debug.Log("들어옴");
-            if (state == CharacterMode.ThreeD)
-            {
-                SetState(CharacterMode.TwoD);
-                SwitchTwoD();
-            }
-            else if (state == CharacterMode.TwoD)
-            {
-                SetState(CharacterMode.ThreeD);
-                SwitchThreeD();
-            }
-        }               
-    }
 
-    private void SetState(CharacterMode newState)
-    {
-        state = newState;
-
-        switch (state)
-        {
-            case CharacterMode.ThreeD:
-                currentState = new ThreeDState(player.transform, anim);
-                break;
-            case CharacterMode.TwoD:
-                currentState = new TwoDState(player.transform, anim);
-                break;
-            case CharacterMode.StringMode:
-                currentState = new StringState(player.transform, anim);
-                break;
-        }
-    }
-
-    void SwitchTwoD()
-    {        
-        spawnPosition = new Vector3(player.transform.position.x, player.transform.position.y + 1, player.transform.position.z);
-        paperPrefab = Instantiate(paperPrefab, spawnPosition, Quaternion.identity);
-
-        player.SetActive(false); // 기존 플레이어 비활성화
-    }
-    void SwitchThreeD()
-    {
-        spawnPosition = new Vector3(paperMode.transform.position.x, paperMode.transform.position.y, paperMode.transform.position.z);
-        player.SetActive(true);
-        player.transform.position = spawnPosition;
-
-        paperPrefab.SetActive(false);
+        currentState = newState;
+        currentState.EnterState(this);
+        
     }
 }

@@ -2,55 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StringState : IPlayerMovement
+public class StringState : IState
 {
-    public Transform stringTF;
-    public Animator animator;
+    public void EnterState(PlayerState ply) { }
 
-    public StringState(Transform transform, Animator animator)
+    public void UpdateState(PlayerState ply) { }
+
+    public void ExitState(PlayerState ply) { }
+
+    public void Move(PlayerState ply)
     {
-        this.stringTF = transform;
-        this.animator = animator;
-    }
-
-    public void Move(Transform transform, float h, float v)
-    {
-        Transform camTransform = Camera.main.transform; // 메인 카메라 가져오기
-        Vector3 forward = camTransform.forward; // 카메라의 전방 벡터
-        Vector3 right = camTransform.right;     // 카메라의 오른쪽 벡터
-
-        forward.y = 0; // 수직 이동을 막기 위해 y축을 0으로 설정
-        right.y = 0;
-
-        forward.Normalize();
-        right.Normalize();
-
-        Vector3 moveDirection = forward * v + right * h;
-        transform.position += moveDirection * Time.deltaTime * 1.5f;
-    }
-
-
-    public void PlayAnimation(float h, float v)
-    {
-        Transform camTransform = Camera.main.transform;
-        Vector3 forward = camTransform.forward;
-        Vector3 right = camTransform.right;
-
-        forward.y = 0;
-        right.y = 0;
-        forward.Normalize();
-        right.Normalize();
-
-        Vector3 moveDirection = forward * v + right * h;
-
-        if (moveDirection != Vector3.zero)
+        Vector3 direction = Vector3.zero;
+        if (Input.GetKey(KeyCode.W))
         {
-            stringTF.rotation = Quaternion.LookRotation(moveDirection); // 카메라 기준으로 방향 회전
-            animator.SetBool("IsMoving", true);
+            direction += Camera.main.transform.forward - Camera.main.transform.right;
         }
-        else
+        if (Input.GetKey(KeyCode.A))
         {
-            animator.SetBool("IsMoving", false);
+            direction += -Camera.main.transform.forward - Camera.main.transform.right;
         }
+        if (Input.GetKey(KeyCode.S))
+        {
+            direction += -Camera.main.transform.forward + Camera.main.transform.right;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            direction += Camera.main.transform.right;
+        }
+
+        direction.y = 0;
+        ply.player.transform.position += direction.normalized * ply.moveSpeed * Time.deltaTime;
     }
 }
