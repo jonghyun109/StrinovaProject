@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThreeDState : MonoBehaviour , IPlayerMovement
+public class ThreeDState :  IPlayerMovement
 {
-    public GameObject threeD;
-    private Animator animator;
+    public Transform playerTransform;
+    public Animator animator;
 
-    private void Start()
+    public ThreeDState(Transform transform, Animator animator)
     {
-        animator = threeD.GetComponent<Animator>();
+        this.playerTransform = transform;
+        this.animator = animator;
     }
+
     public void Move(Transform transform, float h, float v)
     {
         Vector3 moveDir = (Vector3.forward * v) + (Vector3.right * h);
@@ -60,4 +62,5 @@ public class ThreeDState : MonoBehaviour , IPlayerMovement
             animator.SetTrigger("Idle");
         }
     }
+
 }

@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 
-public class TwoDState : MonoBehaviour , IPlayerMovement
+public class TwoDState : IPlayerMovement
 {
-    public GameObject paper;
-    private Animator animator;
+    public Transform paperTF;
+    public Animator animator;
 
-    private void Start()
+    public TwoDState(Transform transform, Animator animator)
     {
-        animator = paper.GetComponent<Animator>();
+        this.paperTF = transform;
+        this.animator = animator;
     }
+
     public void Move(Transform tra, float h, float v)
     {
         tra.position += (Vector3.right * h + Vector3.up * v) * Time.deltaTime * 3;
@@ -26,13 +29,13 @@ public class TwoDState : MonoBehaviour , IPlayerMovement
 
         if (direction != Vector3.zero)
         {
-            paper.transform.rotation = Quaternion.LookRotation(direction);
+            paperTF.rotation = Quaternion.LookRotation(direction);
             animator.SetBool("IsRunning", true);
         }
         else
         {
             animator.SetBool("IsRunning", false);
-            paper.transform.rotation = Quaternion.identity;
+            paperTF.rotation = Quaternion.identity;
         }
     }
 }

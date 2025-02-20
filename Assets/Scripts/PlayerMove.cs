@@ -156,9 +156,6 @@ public class PlayerMove : MonoBehaviour
                 //카메라 전환
                 twoDcam.LookAt = twoD.transform;
                 twoDcam.Follow = twoD.transform;
-
-                Debug.Log("큐브 최대 "+other.bounds.max);
-                Debug.Log("최소 "+other.bounds.min);
             }
         }
     }
