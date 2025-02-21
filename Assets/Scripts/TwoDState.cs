@@ -40,7 +40,7 @@ public class TwoDState :IState
         if (Input.GetKey(KeyCode.D))
         {
             direction += Camera.main.transform.right;
-            }
+        }
 
         direction.y = 0;
         state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;

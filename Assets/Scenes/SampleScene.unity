@@ -426,6 +426,8 @@ MonoBehaviour:
   moveForward: 0
   anim: {fileID: 1689722747}
   jumpHeight: 0
+  jumpCount: 0
+  rb: {fileID: 0}
   isWall: 0
   cams:
   - {fileID: 1008522363}
@@ -2807,7 +2809,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1703615997}
-  - component: {fileID: 1703615996}
+  - component: {fileID: 1703615998}
   m_Layer: 0
   m_Name: CamController
   m_TagString: Untagged
@@ -2815,23 +2817,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1703615996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703615995}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0775e2155115a9744a615a2c05a97c46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 1689722725}
-  cams:
-  - {fileID: 1008522363}
-  - {fileID: 1916403813}
-  - {fileID: 1147062629}
 --- !u!4 &1703615997
 Transform:
   m_ObjectHideFlags: 0
@@ -2847,6 +2832,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1703615998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703615995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b55125ddb457c6f4490dc4f5afc83fb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1689722744}
+  mouseSensitivity: 100
+  playerBody: {fileID: 1689722744}
 --- !u!1 &1747935611
 GameObject:
   m_ObjectHideFlags: 0
