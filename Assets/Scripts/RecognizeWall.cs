@@ -25,4 +25,11 @@ public class RecognizeWall : MonoBehaviour
             playerState.isWall = false;
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            playerState.jumpCount = 0;
+        }
+    }
 }

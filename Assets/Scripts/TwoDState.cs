@@ -9,14 +9,20 @@ public class TwoDState :IState
     PlayerState state;
     public void EnterState(PlayerState ply)
     {
+        state = ply;
         state.paperPlayer.SetActive(true);
+        state.moveSpeed = 2f;
+        state.cams[1].Priority = 11;
     }
 
-    public void UpdateState(PlayerState ply) { }
+    public void UpdateState() { }
 
-    public void ExitState(PlayerState ply) { }
+    public void ExitState()
+    {
+        state.cams[1].Priority = 10;
+    }
 
-    public void Move(PlayerState ply)
+    public void Move()
     {
         Vector3 direction = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
@@ -37,6 +43,6 @@ public class TwoDState :IState
             }
 
         direction.y = 0;
-        ply.player.transform.position += direction.normalized * ply.moveSpeed * Time.deltaTime;
+        state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;
     }
 }

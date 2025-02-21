@@ -8,42 +8,71 @@ public class ThreeDState : IState
     public void EnterState(PlayerState ply)
     {
         state = ply;
-        state.moveSpeed = 2f;
-        state.moveForward = 2f;
-
-        state.moveW = Vector3.forward;
-        state.moveS = Vector3.back;
-        state.moveA = Vector3.left;
-        state.moveD = Vector3.right;
+        state.moveSpeed = 3f;
+        state.jumpHeight = 3f;
+        state.cams[0].Priority = 11;
+        state.player.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        state.player.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
-    public void UpdateState(PlayerState ply) { }
-
-    public void ExitState(PlayerState ply) 
+    public void UpdateState()
     {
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        {
+            state.anim.SetBool("IsWalk", true);            
+        }
+        else
+        {
+            state.anim.SetTrigger("Idle");
+            state.anim.SetBool("IsWalk", false);
+        }
     }
-    public void Move(PlayerState ply)
+
+    public void ExitState() 
     {
+        state.cams[0].Priority = 10;
+        //state.player.SetActive(false);
+    }
+    public void Move()
+    {
+        state.moveSpeed = 3f;
         Vector3 direction = Vector3.zero;
         if (Input.GetKey(KeyCode.W))
-        {
+        {           
             direction += Camera.main.transform.forward;
+            if(Input.GetKey(KeyCode.LeftShift))
+            {
+                state.moveSpeed = 5f;
+                state.anim.SetBool("IsForward",true);
+                state.anim.SetBool("IsWalk", false);
+            }
+            else
+            {
+                state.anim.SetBool("IsWalk", true);
+                state.anim.SetBool("IsForward", false);
+            }
         }
         if (Input.GetKey(KeyCode.S))
         {
             direction -= Camera.main.transform.forward;
+            state.moveSpeed = 3f;
         }
         if (Input.GetKey(KeyCode.A))
-        { 
-            direction -= Camera.main.transform.right; 
+        {
+            direction -= Camera.main.transform.right;
         }
         if (Input.GetKey(KeyCode.D))
         {
             direction += Camera.main.transform.right;
+        }        
+        if (Input.GetKeyDown(KeyCode.Space) && state.jumpCount < 2)
+        {
+            state.jumpCount++;
+            state.anim.SetTrigger("Jump");
+            state.rb.AddForce(Vector3.up * state.jumpHeight, ForceMode.Impulse);
         }
-
-        direction.y = 0;
-        ply.player.transform.position += direction.normalized * ply.moveSpeed * Time.deltaTime;
         
+
+        state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;        
     }
 }
