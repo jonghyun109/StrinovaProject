@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class TwoDState :IState
 {
@@ -20,29 +21,45 @@ public class TwoDState :IState
     public void ExitState()
     {
         state.cams[1].Priority = 10;
+        state.paperPlayer.SetActive(false);
+        Debug.Log("여기 들어오냐");
     }
 
     public void Move()
     {
-        Vector3 direction = Vector3.zero;
+        Vector3 up = Vector2.up;
+        Vector3 right = Vector2.right;
+
+        Vector3 dir = Vector2.zero;
         if (Input.GetKey(KeyCode.W))
         {
-            direction += Camera.main.transform.forward - Camera.main.transform.right;
+            dir += up;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            direction += -Camera.main.transform.forward - Camera.main.transform.right;
+            dir -= right;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            direction += -Camera.main.transform.forward + Camera.main.transform.right;
+            dir -= up;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            direction += Camera.main.transform.right;
+            dir += right;
         }
 
-        direction.y = 0;
-        state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;
+        state.paperPlayer.transform.position += dir * state.moveSpeed * Time.deltaTime;
+    }
+
+    public void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            state.ChangeState(state.threeS);
+            state.jumpCount = 0;
+            state.player.transform.position 
+                = new Vector3(state.paperPlayer.transform.position.x, state.paperPlayer.transform.position.y - 1, state.paperPlayer.transform.position.z);
+            state.player.SetActive(true);
+        }
     }
 }

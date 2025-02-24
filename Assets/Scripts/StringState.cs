@@ -14,7 +14,10 @@ public class StringState : IState
         state.player.gameObject.transform.rotation = Quaternion.Euler(0, 110, 0);
     }
 
-    public void UpdateState() { }
+    public void UpdateState()
+    { 
+
+    }
 
     public void ExitState()
     {
@@ -51,8 +54,14 @@ public class StringState : IState
             direction += right;
         }
 
-        // 이동 적용
         state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;
     }
 
+    public void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            state.ChangeState(state.threeS);
+        }
+    }
 }

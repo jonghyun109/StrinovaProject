@@ -11,6 +11,7 @@ public interface IState
     public void UpdateState();
     public void ExitState();
     public void Move();
+    public void Jump();
 }
 public class PlayerState : MonoBehaviour
 {
@@ -21,8 +22,10 @@ public class PlayerState : MonoBehaviour
     public GameObject player;
     public GameObject paperPlayer;
 
-    StringState SS = new StringState();
-    ThreeDState TS = new ThreeDState();
+    //플레이어 변환할 상태들
+    public StringState stringS = new StringState();
+    public ThreeDState threeS = new ThreeDState();
+    public TwoDState twoS = new TwoDState();
     //Move(wasd)
     public float moveSpeed;
     public float moveForward;
@@ -36,6 +39,7 @@ public class PlayerState : MonoBehaviour
         
     //3d에서 2d ,string 에서 2d 모드 변환 할때 객체변경
     public bool isWall = false;
+    public bool hasSpawned = false;
 
     //string 모드
     public CinemachineVirtualCamera[] cams;
@@ -52,6 +56,12 @@ public class PlayerState : MonoBehaviour
         {
             currentState.UpdateState();
             currentState.Move();
+            currentState.Jump();
+        }
+        if(hasSpawned)
+        {
+            hasSpawned = false;
+            ChangeState(twoS);
         }
         StringModeOnOff();
     }
@@ -74,13 +84,17 @@ public class PlayerState : MonoBehaviour
             isString = !isString;
             if (isString)
             {
-                ChangeState(SS);                
+                ChangeState(stringS);                
             }
             else
             {
-                ChangeState(TS);
+                ChangeState(threeS);
             }
         }
     }
+
+
+
     
+
 }
