@@ -22,7 +22,6 @@ public class TwoDState :IState
     {
         state.cams[1].Priority = 10;
         state.paperPlayer.SetActive(false);
-        Debug.Log("여기 들어오냐");
     }
 
     public void Move()
@@ -60,6 +59,8 @@ public class TwoDState :IState
             state.player.transform.position 
                 = new Vector3(state.paperPlayer.transform.position.x, state.paperPlayer.transform.position.y - 1, state.paperPlayer.transform.position.z);
             state.player.SetActive(true);
+
+            state.rb.velocity = Vector3.zero;
         }
     }
 }

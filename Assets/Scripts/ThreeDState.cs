@@ -13,7 +13,6 @@ public class ThreeDState : IState
         state.cams[0].Priority = 11;
         state.player.gameObject.transform.localScale = new Vector3(1, 1, 1);
         state.player.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-        Debug.Log("gd");
     }
 
     public void UpdateState()
@@ -51,17 +50,27 @@ public class ThreeDState : IState
             direction += Camera.main.transform.right;
         }        
         
-            state.player.transform.position += direction * state.moveSpeed * Time.deltaTime;
+        state.player.transform.position += direction * state.moveSpeed * Time.deltaTime;
 
         Vector3 dir = (Input.GetKey(KeyCode.W) ? Vector3.back : Vector3.zero) +
                       (Input.GetKey(KeyCode.S) ? Vector3.forward : Vector3.zero) +
                       (Input.GetKey(KeyCode.A) ? Vector3.right : Vector3.zero) +
                       (Input.GetKey(KeyCode.D) ? Vector3.left : Vector3.zero);
-
+        
+        
         if (dir != Vector3.zero)
-        { 
-            state.player.transform.rotation = Quaternion.LookRotation(-dir);
-            state.anim.SetBool("IsWalk", true);
+        {
+            if(state.ischlehddh == false)
+            {
+                state.player.transform.rotation = Quaternion.Euler(75, -dir.y, -dir.z);
+                state.player.gameObject.transform.localScale = new Vector3(1, 1, 0.2f);
+                //state.player.transform.rotation = Quaternion.LookRotation(new Vector3(75,-dir.y,-dir.z));
+            }
+            else
+            {
+                state.player.transform.rotation = Quaternion.LookRotation(-dir);
+                state.anim.SetBool("IsWalk", true);
+            }            
         }
         else
         {

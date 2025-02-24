@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -31,6 +32,7 @@ public class PlayerState : MonoBehaviour
     public float moveForward;
     //Animator
     public Animator anim;
+    public AnimatorController[] anims;
 
     //Jump(space)
     public float jumpHeight;
@@ -44,6 +46,8 @@ public class PlayerState : MonoBehaviour
     //string ¸ðµå
     public CinemachineVirtualCamera[] cams;
     static bool isString = false;
+    public bool ischlehddh = true; 
+
     private void Start()
     {
         rb = player.GetComponent<Rigidbody>();
@@ -72,29 +76,40 @@ public class PlayerState : MonoBehaviour
         {
             currentState.ExitState();
         }
-
         currentState = newState;
-        currentState.EnterState(this);
-        
+        currentState.EnterState(this);        
     }
+
     void StringModeOnOff()
-    {         
+    {
         if (Input.GetKeyDown(KeyCode.LeftControl))
-        {            
-            isString = !isString;
-            if (isString)
+        {
+            if (jumpCount > 0 && Input.GetKey(KeyCode.LeftControl))
             {
-                ChangeState(stringS);                
+                ischlehddh = false;
+                //player.gameObject.transform.rotation = Quaternion.Euler(75, 0, 0);
+                anim.SetBool("IsFlying", true);                
+                rb.drag = 5f;
             }
             else
             {
-                ChangeState(threeS);
+                isString = !isString;
+                if (isString)
+                {
+                    ChangeState(stringS);
+                }
+                else
+                {
+                    ChangeState(threeS);
+                }
             }
         }
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            ischlehddh = true;
+        }
+        
+
     }
-
-
-
-    
 
 }

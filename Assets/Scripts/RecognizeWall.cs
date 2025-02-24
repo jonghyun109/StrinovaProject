@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEditor.Animations;
+using Unity.VisualScripting;
+using UnityEngine.Playables;
 
 public class RecognizeWall : MonoBehaviour
 {
@@ -9,11 +12,14 @@ public class RecognizeWall : MonoBehaviour
     public CinemachineVirtualCamera twoDcam;
     bool isPaper = false;
 
+    
+
+
     private void Start()
     {
         playerState = FindObjectOfType<PlayerState>();
     }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("TwoDWall"))
@@ -32,13 +38,20 @@ public class RecognizeWall : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Floor"))
         {
+            playerState.player.gameObject.transform.localScale = new Vector3(1, 1, 1f);
+            playerState.player.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+
+            playerState.anim.SetTrigger("Idle");
+            playerState.anim.SetBool("IsFlying", false);
+
             playerState.jumpCount = 0;
+            playerState.rb.drag = 0f;
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("TwoDWall") && playerState.isWall == true)
+        if (playerState.isWall == true)
         {
             if (Input.GetKeyDown(KeyCode.E) && !playerState.hasSpawned)
             {
@@ -50,11 +63,13 @@ public class RecognizeWall : MonoBehaviour
                     playerState.paperPlayer = twoD;
                     isPaper = true;
                 }
-                playerState.paperPlayer.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z);
-                playerState.hasSpawned = true;
-                playerState.paperPlayer.SetActive(true);
+                else
+                {
+                    playerState.paperPlayer.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1, this.transform.position.z);                    
+                    playerState.paperPlayer.SetActive(true);                    
+                }
                 playerState.player.SetActive(false);
-
+                playerState.hasSpawned = true;
                 twoDcam.Follow = playerState.paperPlayer.transform;
                 twoDcam.LookAt = playerState.paperPlayer.transform;
             }
