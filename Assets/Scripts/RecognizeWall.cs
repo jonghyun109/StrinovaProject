@@ -72,5 +72,9 @@ public class RecognizeWall : MonoBehaviour
             }
         }
     }
+    public void SetNewPaperPlayer(GameObject newPaperPlayer)
+    {
+        playerState.paperPlayer = newPaperPlayer;
+    }
 
 }

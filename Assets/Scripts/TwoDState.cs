@@ -5,14 +5,15 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class TwoDState :IState
+public class TwoDState : IState
 {
     PlayerState state;
     public void EnterState(PlayerState ply)
     {
         state = ply;
+        state.crossHair.gameObject.SetActive(false);
         state.paperPlayer.SetActive(true);
-        state.moveSpeed = 2f;
+        state.moveSpeed = 3f;
         state.cams[1].Priority = 11;
     }
 

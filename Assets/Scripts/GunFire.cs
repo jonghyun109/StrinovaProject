@@ -2,13 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.UIElements;
 
 public class GunFire : MonoBehaviour
 {
     public GameObject muzzlePrefab;
     public GameObject muzzlePosition;
+    public Camera maincam;
 
     public float shootDelay = 0.5f;
+    public float bulletSpeed = 20f; // 탄속 추가
+    
+    private Vector3 lastShotStart;
+    private Vector3 lastShotEnd;
+    Vector3 shotDir;
 
     public GameObject scope;
     public bool scopeAction = true;
@@ -16,8 +23,8 @@ public class GunFire : MonoBehaviour
     [SerializeField] private float timeLastFired;
 
     private IObjectPool<Bullet> _pool;
-    
 
+    Ray ray;
     private void Awake()
     {
         _pool = new ObjectPool<Bullet>
@@ -50,6 +57,8 @@ public class GunFire : MonoBehaviour
     void Start()
     {
         timeLastFired = 0;
+
+        maincam = Camera.main;
     }
 
     void Update()
@@ -61,6 +70,7 @@ public class GunFire : MonoBehaviour
             //Instantiate(muzzlePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);
             var particle = _pool.Get();
             particle.Shoot(muzzlePosition.transform.position);
+            ShootRayFromCamera();
         }
 
     }
@@ -74,5 +84,32 @@ public class GunFire : MonoBehaviour
 
         // --- Shoot Projectile Object ---       
         GameObject newProjectile = Instantiate(muzzlePrefab,muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);        
+    }
+    private void ShootRayFromCamera()
+    {
+        Ray ray = maincam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        RaycastHit hit;
+
+        lastShotStart = ray.origin;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            lastShotEnd = hit.point;
+            shotDir = (hit.point - muzzlePosition.transform.position).normalized;
+        }
+        else
+        {
+            lastShotEnd = ray.origin + ray.direction * 100f;
+            shotDir = ray.direction; // 아무것도 맞지 않으면 기본 카메라 방향으로 발사
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (lastShotStart != Vector3.zero && lastShotEnd != Vector3.zero)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(lastShotStart, lastShotEnd);
+            Gizmos.DrawSphere(lastShotEnd, 0.2f);
+        }
     }
 }

@@ -5,6 +5,7 @@ using Cinemachine;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public interface IState
 {
@@ -28,9 +29,11 @@ public class PlayerState : MonoBehaviour
     public StringState stringS = new StringState();
     public ThreeDState threeS = new ThreeDState();
     public TwoDState twoS = new TwoDState();
-    //Move(wasd)
+
+    //Move
     public float moveSpeed;
     public float moveForward;
+
     //Animator
     public Animator anim;
     public AnimatorController[] anims;
@@ -43,13 +46,14 @@ public class PlayerState : MonoBehaviour
     //3d에서 2d ,string 에서 2d 모드 변환 할때 객체변경
     public bool isWall = false;
     public bool hasSpawned = false;
+    public RawImage crossHair;
 
     //string 모드
     public CinemachineVirtualCamera[] cams;
     static bool isString = false;
     public bool ischlehddh = true;
+    
 
-    Ray ray;
     private void Start()
     {
         rb = player.GetComponent<Rigidbody>();
