@@ -12,11 +12,12 @@ public interface IState
     public void UpdateState();
     public void ExitState();
     public void Move();
-    public void Jump();
+    public void Jump();    
 }
 public class PlayerState : MonoBehaviour
 {
     //얘만 바꾸면 스크립트 바뀌게 ㄱ
+    [SerializeField]
     IState currentState;
 
     //3D플레이어 ,2D플레이어
@@ -46,8 +47,9 @@ public class PlayerState : MonoBehaviour
     //string 모드
     public CinemachineVirtualCamera[] cams;
     static bool isString = false;
-    public bool ischlehddh = true; 
+    public bool ischlehddh = true;
 
+    Ray ray;
     private void Start()
     {
         rb = player.GetComponent<Rigidbody>();
@@ -58,9 +60,9 @@ public class PlayerState : MonoBehaviour
     {
         if (currentState != null)
         {
-            currentState.UpdateState();
             currentState.Move();
             currentState.Jump();
+            currentState.UpdateState();
         }
         if(hasSpawned)
         {
@@ -87,7 +89,6 @@ public class PlayerState : MonoBehaviour
             if (jumpCount > 0 && Input.GetKey(KeyCode.LeftControl))
             {
                 ischlehddh = false;
-                //player.gameObject.transform.rotation = Quaternion.Euler(75, 0, 0);
                 anim.SetBool("IsFlying", true);                
                 rb.drag = 5f;
             }
@@ -108,8 +109,6 @@ public class PlayerState : MonoBehaviour
         {
             ischlehddh = true;
         }
-        
-
     }
 
 }

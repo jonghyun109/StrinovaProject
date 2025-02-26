@@ -6,22 +6,21 @@ public class StringState : IState
 {
     PlayerState state;
     public void EnterState(PlayerState ply) 
-    {        
+    {
         state = ply;
         state.moveSpeed = 1.5f;
-        state.cams[2].Priority = 11;
+        state.cams[0].Priority = 11;
         state.player.gameObject.transform.localScale = new Vector3(1, 1, 0.2f);
         state.player.gameObject.transform.rotation = Quaternion.Euler(0, 110, 0);
     }
 
     public void UpdateState()
     { 
-
     }
 
     public void ExitState()
     {
-        state.cams[2].Priority = 10;
+        state.cams[0].Priority = 10;
     }
 
     public void Move()
@@ -53,7 +52,6 @@ public class StringState : IState
         {
             direction += right;
         }
-
         state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;
     }
 

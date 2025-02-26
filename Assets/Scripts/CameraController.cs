@@ -1,21 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
+using System;
 
 public class CameraController : MonoBehaviour
 {
-    public float sensitivity = 0.1f;
+    //Rigidbody rb;
 
+    //[Header("Rotate")]
+    //public float mouseSpeed;
+    //float yRotation;
+    //float xRotation;
+    //public CinemachineVirtualCamera cam;
 
-    void Update()
-    {
-        float deltaX = Input.GetAxis("Mouse X");
-        float deltaY = Input.GetAxis("Mouse Y");
+    //void Start()
+    //{
+    //    Cursor.lockState = CursorLockMode.Locked;   // 마우스 커서를 화면 안에서 고정
+    //    //Cursor.visible = false;                     // 마우스 커서를 보이지 않도록 설정
 
-        Vector3 newPosition = transform.position;
-        newPosition.x += deltaX * sensitivity;
-        newPosition.y += deltaY * sensitivity;
+    //    rb = GetComponent<Rigidbody>();             // Rigidbody 컴포넌트 가져오기
+                
+    //}
+    //void Update()
+    //{
+    //    Rotate();
+    //}
 
-        transform.position = newPosition;
-    }
+    //void Rotate()
+    //{
+    //    float mouseX = Input.GetAxisRaw("Mouse X") * mouseSpeed * Time.deltaTime;
+    //    float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSpeed * Time.deltaTime;
+
+    //    yRotation += mouseX;    // 마우스 X축 입력에 따라 수평 회전 값을 조정
+    //    xRotation -= mouseY;    // 마우스 Y축 입력에 따라 수직 회전 값을 조정
+
+    //    xRotation = Mathf.Clamp(xRotation, -90f, 90f);  // 수직 회전 값을 -90도에서 90도 사이로 제한
+
+    //    cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0); // 카메라의 회전을 조절
+    //    transform.rotation = Quaternion.Euler(0, yRotation, 0);             // 플레이어 캐릭터의 회전을 조절
+    //}
 }
+
+

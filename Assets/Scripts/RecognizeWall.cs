@@ -12,9 +12,6 @@ public class RecognizeWall : MonoBehaviour
     public CinemachineVirtualCamera twoDcam;
     bool isPaper = false;
 
-    
-
-
     private void Start()
     {
         playerState = FindObjectOfType<PlayerState>();

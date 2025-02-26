@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 624038398547700386}
-  - component: {fileID: 280022733999566874}
+  - component: {fileID: -6126517402101092902}
+  - component: {fileID: 7909754642264071082}
   m_Layer: 0
   m_Name: Assault_Rifle_M4_with_scope
   m_TagString: Untagged
@@ -34,7 +35,7 @@ Transform:
   - {fileID: 1412907763818372900}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &280022733999566874
+--- !u!114 &-6126517402101092902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,20 +44,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 280022733999566872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 933e18ea02e20a1429dc3cdc3671dbc7, type: 3}
+  m_Script: {fileID: 11500000, guid: c0e5fa0996da189458fa38774cf29ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   muzzlePrefab: {fileID: 1336949550903370, guid: 4543ab5e3d405ec40a8d4e9aa5165030, type: 3}
   muzzlePosition: {fileID: 6616221640574261596}
-  autoFire: 1
-  shotDelay: 0.2
-  rotate: 0
-  rotationSpeed: 0.15
-  scope: {fileID: 3954932942528283265}
-  scopeActive: 1
-  projectilePrefab: {fileID: 0}
-  projectileToDisableOnFire: {fileID: 0}
-  timeLastFired: -1
+  shootDelay: 0.5
+  scope: {fileID: 0}
+  scopeAction: 1
+  timeLastFired: 0
+--- !u!114 &7909754642264071082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 280022733999566872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07ad2fc2c5e56754a88631325151dd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 3
 --- !u!1 &1622285178474743474
 GameObject:
   m_ObjectHideFlags: 0
