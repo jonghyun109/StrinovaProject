@@ -11,10 +11,11 @@ public class TwoDState : IState
     public void EnterState(PlayerState ply)
     {
         state = ply;
-        state.crossHair.gameObject.SetActive(false);
         state.paperPlayer.SetActive(true);
         state.moveSpeed = 3f;
         state.cams[1].Priority = 11;
+        
+        //state.crossHair.SetActive(false);
     }
 
     public void UpdateState() { }

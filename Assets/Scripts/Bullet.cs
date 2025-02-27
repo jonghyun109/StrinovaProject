@@ -13,9 +13,6 @@ public class Bullet : MonoBehaviour
 
     private IObjectPool<Bullet> _pool;
 
-    private void Update()
-    {
-    }
     public void SetPool(IObjectPool<Bullet> pool)
     {
         _pool = pool;

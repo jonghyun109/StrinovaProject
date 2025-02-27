@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -9,9 +9,11 @@ public class GunFire : MonoBehaviour
     public GameObject muzzlePrefab;
     public GameObject muzzlePosition;
     public Camera maincam;
+    public GameObject bulletImpactPrefab;
+    public GameObject enemyHitEffectPrefab;
 
     public float shootDelay = 0.5f;
-    public float bulletSpeed = 20f; // ≈∫º” √ﬂ∞°
+    public float bulletSpeed = 20f; // ÌÉÑÏÜç Ï∂îÍ∞Ä
     
     private Vector3 lastShotStart;
     private Vector3 lastShotEnd;
@@ -46,14 +48,17 @@ public class GunFire : MonoBehaviour
     {
         bullet.gameObject.SetActive(true);
     }
+
     private void OnReleaseBullet(Bullet bullet)
     {
         bullet.gameObject.SetActive(false);
     }
+
     void OnDestroyBullet(Bullet bullet)
     {
         Destroy(bullet.gameObject);
     }
+
     void Start()
     {
         timeLastFired = 0;
@@ -74,17 +79,12 @@ public class GunFire : MonoBehaviour
         }
 
     }
-    public void FireWeapon()
-    {
-        // --- Keep track of when the weapon is being fired ---
-        
+    //public void FireWeapon()
+    //{
+    //    //var flash = Instantiate(muzzlePrefab, muzzlePosition.transform);
 
-        // --- Spawn muzzle flash ---
-        //var flash = Instantiate(muzzlePrefab, muzzlePosition.transform);
-
-        // --- Shoot Projectile Object ---       
-        GameObject newProjectile = Instantiate(muzzlePrefab,muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);        
-    }
+    //    GameObject newProjectile = Instantiate(muzzlePrefab,muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);        
+    //}
     private void ShootRayFromCamera()
     {
         Ray ray = maincam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
@@ -95,11 +95,27 @@ public class GunFire : MonoBehaviour
         {
             lastShotEnd = hit.point;
             shotDir = (hit.point - muzzlePosition.transform.position).normalized;
+
+            if (bulletImpactPrefab != null)
+            {
+                GameObject impact = Instantiate(bulletImpactPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impact, 2f);
+            }
+
+            // Ï†Å ÌîºÍ≤© Ìö®Í≥º Ï∂îÍ∞Ä
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                if (enemyHitEffectPrefab != null)
+                {
+                    GameObject hitEffect = Instantiate(enemyHitEffectPrefab, hit.point, Quaternion.identity);
+                    Destroy(hitEffect, 2f);
+                }
+            }
         }
         else
         {
             lastShotEnd = ray.origin + ray.direction * 100f;
-            shotDir = ray.direction; // æ∆π´∞Õµµ ∏¬¡ˆ æ ¿∏∏È ±‚∫ª ƒ´∏ﬁ∂Û πÊ«‚¿∏∑Œ πﬂªÁ
+            shotDir = ray.direction; // ÏïÑÎ¨¥Í≤ÉÎèÑ ÎßûÏßÄ ÏïäÏúºÎ©¥ Í∏∞Î≥∏ Ïπ¥Î©îÎùº Î∞©Ìñ•ÏúºÎ°ú Î∞úÏÇ¨
         }
     }
 

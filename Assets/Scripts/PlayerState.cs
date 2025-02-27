@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Playables;
 using UnityEngine.UI;
 
 public interface IState
@@ -29,14 +28,14 @@ public class PlayerState : MonoBehaviour
     public StringState stringS = new StringState();
     public ThreeDState threeS = new ThreeDState();
     public TwoDState twoS = new TwoDState();
+    public ZoomState zoomS = new ZoomState();
 
     //Move
     public float moveSpeed;
     public float moveForward;
 
     //Animator
-    public Animator anim;
-    public AnimatorController[] anims;
+    public Animator anim;    
 
     //Jump(space)
     public float jumpHeight;
@@ -46,10 +45,15 @@ public class PlayerState : MonoBehaviour
     //3d에서 2d ,string 에서 2d 모드 변환 할때 객체변경
     public bool isWall = false;
     public bool hasSpawned = false;
-    public RawImage crossHair;
+    public GameObject zoom;
+    public GameObject crossHair;
+
+    
+    // 카메라 및 UI 관련
+    public CinemachineVirtualCamera[] cams;
+    public GameObject scopeUI;
 
     //string 모드
-    public CinemachineVirtualCamera[] cams;
     static bool isString = false;
     public bool ischlehddh = true;
     
@@ -74,6 +78,7 @@ public class PlayerState : MonoBehaviour
             ChangeState(twoS);
         }
         StringModeOnOff();
+        HandleZoom();
     }
     
     public void ChangeState(IState newState)
@@ -112,6 +117,20 @@ public class PlayerState : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             ischlehddh = true;
+        }
+    }
+    void HandleZoom()
+    {
+        if (Input.GetMouseButtonDown(1)) // 우클릭
+        {
+            if (currentState is ZoomState)
+            {
+                ChangeState(threeS); // 줌 상태일 때 해제
+            }
+            else
+            {
+                ChangeState(zoomS); // 줌 상태로 변경
+            }
         }
     }
 

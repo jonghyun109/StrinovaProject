@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Floor
   - TwoDWall
+  - Enemy
   layers:
   - Default
   - TransparentFX

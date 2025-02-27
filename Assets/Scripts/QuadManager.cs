@@ -45,7 +45,6 @@ public class QuadManager : MonoBehaviour
             return;
         }
 
-        // 🟢 새 Quad에 메시 변형 컴포넌트 추가
         if (!newQuad.GetComponent<QuadMeshBend>())
         {
             newQuad.AddComponent<QuadMeshBend>();
