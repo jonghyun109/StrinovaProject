@@ -5,18 +5,15 @@ using UnityEngine;
 public class ZoomState : IState
 {
     PlayerState state;
-    private float defaultFOV;
 
     public void EnterState(PlayerState ply)
     {
         state = ply;
-        defaultFOV = state.cams[0].m_Lens.FieldOfView;
-
+        state.cams[1].Priority = 11;
         state.crossHair.gameObject.SetActive(false);
-
+        state.player.transform.rotation = Quaternion.Euler(0, 40, 0);
         state.moveSpeed = 1f;
-
-        state.cams[0].m_Lens.FieldOfView = 20f;
+        state.anim.SetBool("IsZoom", true);
 
         state.scopeUI.SetActive(true);
     }
@@ -26,6 +23,8 @@ public class ZoomState : IState
     public void ExitState()
     {
         state.scopeUI.SetActive(false);
+        state.cams[1].Priority = 10;
+        state.anim.SetBool("IsZoom", false);
     }
 
     public void Move()

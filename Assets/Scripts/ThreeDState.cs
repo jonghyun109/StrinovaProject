@@ -12,7 +12,6 @@ public class ThreeDState : IState
         state.moveSpeed = 3f;
         state.jumpHeight = 30f;
         state.cams[0].Priority = 11;
-        state.cams[0].m_Lens.FieldOfView = 60f;
 
         state.crossHair.gameObject.SetActive(true);
         state.player.gameObject.transform.localScale = new Vector3(1, 1, 1);
@@ -87,13 +86,12 @@ public class ThreeDState : IState
 
         if (Input.GetMouseButtonDown(0))
         {
-            state.player.transform.rotation = Quaternion.Euler(0, 40, 0);
-            state.anim.SetBool("IsShoot", true);            
-            
+            //state.player.transform.rotation = Quaternion.Euler(0, 40, 0);
+            state.anim.SetBool("IsShoot", true);
         }
         if (Input.GetMouseButtonUp(0))
         {
-            state.player.transform.rotation = Quaternion.identity;
+            //state.player.transform.rotation = Quaternion.identity;
             state.anim.SetTrigger("Idle");
             state.anim.SetBool("IsShoot", false);
         }

@@ -42,17 +42,16 @@ public class CameraController : MonoBehaviour
         // 플레이어가 카메라 방향을 바라보도록 설정 (좌우만)
         player.rotation = Quaternion.Euler(0, rotationY, 0);
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0)|| Input.GetMouseButton(1))
         {
             player.rotation = Quaternion.Euler(0, rotationY+40, 0);
         }
+        
         else
         {
             // 플레이어가 카메라 방향을 따라 회전
             player.rotation = Quaternion.Euler(0, rotationY, 0);
-        }
-
-        
+        }        
     }
     
 }

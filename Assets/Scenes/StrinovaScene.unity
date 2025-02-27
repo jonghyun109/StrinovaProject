@@ -867,6 +867,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224003257083572172, guid: 47fcb21dc69d163488f245f38e44177f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 3120
+      objectReference: {fileID: 0}
+    - target: {fileID: 224003257083572172, guid: 47fcb21dc69d163488f245f38e44177f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1860
+      objectReference: {fileID: 0}
     - target: {fileID: 224135283832320286, guid: 47fcb21dc69d163488f245f38e44177f, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2499,6 +2507,9 @@ PrefabInstance:
     - {fileID: 11400004, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400096, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1692916342}
     - targetCorrespondingSourceObject: {fileID: 400178, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1399376728}
@@ -3119,8 +3130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 790695149}
   - component: {fileID: 790695152}
-  - component: {fileID: 790695151}
-  - component: {fileID: 790695153}
   m_Layer: 0
   m_Name: cm
   m_TagString: Untagged
@@ -3143,33 +3152,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1916403814}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &790695151
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 790695148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TrackedObjectOffset: {x: 0, y: 0, z: 0}
-  m_LookaheadTime: 0
-  m_LookaheadSmoothing: 0
-  m_LookaheadIgnoreY: 0
-  m_HorizontalDamping: 0.5
-  m_VerticalDamping: 0.5
-  m_ScreenX: 0.5
-  m_ScreenY: 0.5
-  m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
-  m_BiasX: 0
-  m_BiasY: 0
-  m_CenterOnActivate: 1
 --- !u!114 &790695152
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -3182,28 +3164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &790695153
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 790695148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
-  m_XDamping: 1
-  m_YDamping: 1
-  m_ZDamping: 1
-  m_AngularDampingMode: 0
-  m_PitchDamping: 0
-  m_YawDamping: 0
-  m_RollDamping: 0
-  m_AngularDamping: 0
 --- !u!1 &853582986
 GameObject:
   m_ObjectHideFlags: 0
@@ -3708,7 +3668,7 @@ MonoBehaviour:
   player: {fileID: 1689722744}
   virtualCam: {fileID: 1008522363}
   mouseSensitivity: 2
-  offset: {x: 0, y: 3, z: -5}
+  offset: {x: 0, y: 3, z: -3}
 --- !u!1 &1147062628
 GameObject:
   m_ObjectHideFlags: 0
@@ -4367,6 +4327,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   twoDcam: {fileID: 1916403813}
+--- !u!1 &1692916341
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1692916342}
+  m_Layer: 3
+  m_Name: Aim
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1692916342
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692916341}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.4698567, y: 0, z: 0, w: 0.8827427}
+  m_LocalPosition: {x: 0, y: 0.9, z: 1.05}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1689722744}
+  m_LocalEulerAnglesHint: {x: 56.05, y: 0, z: 0}
 --- !u!1 &1693165795
 GameObject:
   m_ObjectHideFlags: 0
@@ -4919,8 +4910,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1916403814}
   - component: {fileID: 1916403813}
+  - component: {fileID: 1916403815}
   m_Layer: 0
-  m_Name: TwoDCam
+  m_Name: ZoomCam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4945,11 +4937,11 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 1689722744}
+  m_Follow: {fileID: 0}
   m_Lens:
-    FieldOfView: 20
+    FieldOfView: 30
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 1.5
     FarClipPlane: 5000
     Dutch: 0
     ModeOverride: 0
@@ -4973,14 +4965,30 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1916403812}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.30999994, y: 0, z: -23.29}
+  m_LocalRotation: {x: 0.13364027, y: 0, z: 0, w: 0.99103}
+  m_LocalPosition: {x: 0.30999994, y: 1.76, z: -15.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 790695149}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15.36, y: 0, z: 0}
+--- !u!114 &1916403815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916403812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b55125ddb457c6f4490dc4f5afc83fb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1689722744}
+  virtualCam: {fileID: 1916403813}
+  mouseSensitivity: 2
+  offset: {x: 0, y: 2, z: 0}
 --- !u!4 &2103459833 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400178, guid: 412b92d4feeb9c548bfa98f62c4d1022, type: 3}
