@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
-using System;
 using UnityEngine.Playables;
 
 public class CameraController : MonoBehaviour
@@ -15,6 +14,11 @@ public class CameraController : MonoBehaviour
     private float rotationX = 0f;
     private float rotationY = 0f;
     private bool isShooting = false; // 총 쏘는 상태 체크
+
+    //** 반동을 저장할 변수 추가 **//
+    private float recoilX = 0f;
+    public float recoilY = 0f;
+    private float recoilRecoverySpeed = 5f;
 
     void Start()
     {
@@ -30,28 +34,42 @@ public class CameraController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
         // 회전 값 갱신
-        rotationX -= mouseY;
-        rotationY += mouseX;
+        rotationX -= (mouseY + recoilX);
+        rotationY += (mouseX + recoilY);
         rotationX = Mathf.Clamp(rotationX, -45f, 45f); // 위아래 제한
 
-        // 카메라 회전 적용 (플레이어는 좌우 회전만 적용)
         transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
         transform.position = player.position + transform.rotation * offset;
-
-        // 플레이어가 카메라 방향을 바라보도록 설정 (좌우만)
+                
         player.rotation = Quaternion.Euler(0, rotationY, 0);
 
         if (Input.GetMouseButton(0) || Input.GetMouseButton(1)|| Input.GetKey(KeyCode.LeftShift))
         {
             player.rotation = Quaternion.Euler(0, rotationY + 40, 0);
         }
-
+        else if (Input.GetKey(KeyCode.LeftControl))
+        {
+            player.rotation = Quaternion.Euler(0, rotationY + 110, 0);
+        }
         else
         {
             // 플레이어가 카메라 방향을 따라 회전
             player.rotation = Quaternion.Euler(0, rotationY, 0);
         }
+
+        //** 반동을 부드럽게 복구 **//
+        recoilX = Mathf.Lerp(recoilX, 0, Time.deltaTime * recoilRecoverySpeed);
+        recoilY = Mathf.Lerp(recoilY, 0, Time.deltaTime * recoilRecoverySpeed);
     }
+    public void ApplyCameraRecoil(float recoilAmount)
+    {
+        recoilX += recoilAmount;
+        recoilY += Random.Range(-0.2f, 0.2f);
+    }
+
+
+
+
 }
 
 

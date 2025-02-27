@@ -64,5 +64,6 @@ public class TwoDState : IState
 
             state.rb.velocity = Vector3.zero;
         }
+        
     }
 }

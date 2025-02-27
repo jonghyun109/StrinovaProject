@@ -46,6 +46,7 @@ public class ThreeDState : IState
     {
         state.cams[0].Priority = 10;
         //state.player.SetActive(false);
+        state.anim.SetTrigger("Idle");
     }
 
     public void Move()
@@ -97,14 +98,9 @@ public class ThreeDState : IState
             state.anim.SetTrigger("Idle");
             state.anim.SetBool("IsShoot", false);
         }
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-
-        }
 
         if (moveDirection != Vector3.zero)
         {
-            // 플레이어가 이동 방향을 바라보도록 설정
             state.player.transform.rotation = Quaternion.LookRotation(moveDirection);
             state.anim.SetBool("IsWalk", true);
         }

@@ -33,6 +33,7 @@ public class SemiZoomState : IState
     {
         state.cams[2].Priority = 10;
         state.anim.SetBool("IsZoom", false);
+        state.anim.SetTrigger("Idle");
     }
 
     public void Move()

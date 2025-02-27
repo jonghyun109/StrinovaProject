@@ -71,20 +71,30 @@ public class GunFire : MonoBehaviour
         if(Input.GetMouseButton(0)&& ((timeLastFired + shootDelay) <= Time.time))
         {
             timeLastFired = Time.time;
-            //FireWeapon();
             //Instantiate(muzzlePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);
             var particle = _pool.Get();
             particle.Shoot(muzzlePosition.transform.position);
             ShootRayFromCamera();
+            ApplyRecoil();
         }
-
     }
-    //public void FireWeapon()
-    //{
-    //    //var flash = Instantiate(muzzlePrefab, muzzlePosition.transform);
+    //** 반동 적용 함수 추가 **//
+    void ApplyRecoil()
+    {
+        float recoilAmount = 1f; // 기본 반동 크기
+        float aimRecoilAmount = 0.3f; // 정조준 시 반동 감소
 
-    //    GameObject newProjectile = Instantiate(muzzlePrefab,muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);        
-    //}
+        if (Camera.main != null)
+        {
+            CameraController camController = Camera.main.GetComponent<CameraController>();
+            if (camController != null)
+            {
+                bool isAiming = Input.GetMouseButton(1);
+                camController.ApplyCameraRecoil(isAiming ? aimRecoilAmount : recoilAmount);
+            }
+        }
+    }
+
     private void ShootRayFromCamera()
     {
         Ray ray = maincam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
@@ -96,13 +106,16 @@ public class GunFire : MonoBehaviour
             lastShotEnd = hit.point;
             shotDir = (hit.point - muzzlePosition.transform.position).normalized;
 
-            if (bulletImpactPrefab != null)
+            // ** 레이캐스트를 카메라 반동 값이 적용된 위치에서 쏘도록 수정 **
+            if (Camera.main != null)
             {
-                GameObject impact = Instantiate(bulletImpactPrefab, hit.point, Quaternion.LookRotation(hit.normal));
-                Destroy(impact, 2f);
+                CameraController camController = Camera.main.GetComponent<CameraController>();
+                if (camController != null)
+                {
+                    float recoilFactor = camController.recoilY * 0.1f; // 반동 값 반영
+                    shotDir = Quaternion.Euler(-recoilFactor, recoilFactor, 0) * shotDir;
+                }
             }
-
-            // 적 피격 효과 추가
             if (hit.collider.CompareTag("Enemy"))
             {
                 if (enemyHitEffectPrefab != null)
@@ -111,11 +124,17 @@ public class GunFire : MonoBehaviour
                     Destroy(hitEffect, 2f);
                 }
             }
+            else if (bulletImpactPrefab != null)
+            {
+                GameObject impact = Instantiate(bulletImpactPrefab, hit.point, Quaternion.LookRotation(hit.point));
+                Destroy(impact, 2f);
+            }
+            
         }
         else
         {
             lastShotEnd = ray.origin + ray.direction * 100f;
-            shotDir = ray.direction; // 아무것도 맞지 않으면 기본 카메라 방향으로 발사
+            shotDir = ray.direction; 
         }
     }
 

@@ -78,7 +78,10 @@ public class PlayerState : MonoBehaviour
             hasSpawned = false;
             ChangeState(twoS);
         }
-        StringModeOnOff();
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            StringModeOnOff();
+        }
         HandleZoom();
         HandleSemiZoom();
     }
@@ -105,45 +108,32 @@ public class PlayerState : MonoBehaviour
 
     void StringModeOnOff()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
-            if (jumpCount > 0 && Input.GetKey(KeyCode.LeftControl))
+            if (currentState != stringS)
             {
-                ischlehddh = false;
-                anim.SetBool("IsFlying", true);
-                player.transform.localScale = new Vector3(1, 1, 0.2f);
-                player.transform.rotation = Quaternion.Euler(70, 0, 0);
-                rb.drag = 5f;
-            }
-            else
-            {
-                isString = !isString;
-                if (isString)
-                {
-                    ChangeState(stringS);
-                }
-                else
-                {
-                    ChangeState(threeS);
-                }
+                ChangeState(stringS);
             }
         }
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        else if(Input.GetKeyUp(KeyCode.LeftControl))
         {
-            ischlehddh = true;
+            if (currentState != threeS) 
+            {
+                ChangeState(threeS);
+            }
         }
     }
     void HandleZoom()
     {
-        if (Input.GetMouseButtonDown(1)) // 우클릭
+        if (Input.GetMouseButtonDown(1))
         {
             if (currentState is ZoomState)
             {
-                ChangeState(threeS); // 줌 상태일 때 해제
+                ChangeState(threeS);
             }
             else
             {
-                ChangeState(zoomS); // 줌 상태로 변경
+                ChangeState(zoomS);
             }
         }
     }
@@ -151,7 +141,7 @@ public class PlayerState : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentState is ThreeDState)
         {
-            ChangeState(semiZoomS); // 🟢 Shift 누르면 반줌 상태로 변경
+            ChangeState(semiZoomS); 
         }
     }
 
