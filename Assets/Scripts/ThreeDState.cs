@@ -12,6 +12,8 @@ public class ThreeDState : IState
         state.moveSpeed = 3f;
         state.jumpHeight = 30f;
         state.cams[0].Priority = 11;
+        state.cams[0].m_Lens.FieldOfView = 60f;
+        state.cams[0].m_Lens.NearClipPlane = 0.1f;
 
         state.crossHair.gameObject.SetActive(true);
         state.player.gameObject.transform.localScale = new Vector3(1, 1, 1);

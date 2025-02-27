@@ -1,59 +1,57 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using System;
+using UnityEngine.Playables;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform player; // ÇÃ·¹ÀÌ¾î Transform
+    public Transform player; // í”Œë ˆì´ì–´ Transform
     public CinemachineVirtualCamera virtualCam;
-    public float mouseSensitivity = 2f; // ¸¶¿ì½º °¨µµ
-    public Vector3 offset = new Vector3(0, 3, -5); // Ä«¸Ş¶ó ¿ÀÇÁ¼Â
+    public float mouseSensitivity = 2f; // ë§ˆìš°ìŠ¤ ê°ë„
+    public Vector3 offset = new Vector3(0, 3, -5); // ì¹´ë©”ë¼ ì˜¤í”„ì…‹
 
     private float rotationX = 0f;
     private float rotationY = 0f;
-    private bool isShooting = false; // ÃÑ ½î´Â »óÅÂ Ã¼Å©
-
+    private bool isShooting = false; // ì´ ì˜ëŠ” ìƒíƒœ ì²´í¬
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // ¸¶¿ì½º Ä¿¼­ Àá±İ
+        Cursor.lockState = CursorLockMode.Locked; // ë§ˆìš°ìŠ¤ ì»¤ì„œ ì ê¸ˆ
         Cursor.visible = false;
     }
-
     void LateUpdate()
     {
         if (player == null) return;
 
-        // ¸¶¿ì½º ÀÔ·Â ¹Ş±â
+        // ë§ˆìš°ìŠ¤ ì…ë ¥ ë°›ê¸°
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
 
-        // È¸Àü °ª °»½Å
+        // íšŒì „ ê°’ ê°±ì‹ 
         rotationX -= mouseY;
         rotationY += mouseX;
-        rotationX = Mathf.Clamp(rotationX, -45f, 45f); // À§¾Æ·¡ Á¦ÇÑ
+        rotationX = Mathf.Clamp(rotationX, -45f, 45f); // ìœ„ì•„ë˜ ì œí•œ
 
-        // Ä«¸Ş¶ó È¸Àü Àû¿ë (ÇÃ·¹ÀÌ¾î´Â ÁÂ¿ì È¸Àü¸¸ Àû¿ë)
+        // ì¹´ë©”ë¼ íšŒì „ ì ìš© (í”Œë ˆì´ì–´ëŠ” ì¢Œìš° íšŒì „ë§Œ ì ìš©)
         transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
         transform.position = player.position + transform.rotation * offset;
 
-        // ÇÃ·¹ÀÌ¾î°¡ Ä«¸Ş¶ó ¹æÇâÀ» ¹Ù¶óº¸µµ·Ï ¼³Á¤ (ÁÂ¿ì¸¸)
+        // í”Œë ˆì´ì–´ê°€ ì¹´ë©”ë¼ ë°©í–¥ì„ ë°”ë¼ë³´ë„ë¡ ì„¤ì • (ì¢Œìš°ë§Œ)
         player.rotation = Quaternion.Euler(0, rotationY, 0);
 
-        if (Input.GetMouseButton(0)|| Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(1)|| Input.GetKey(KeyCode.LeftShift))
         {
-            player.rotation = Quaternion.Euler(0, rotationY+40, 0);
+            player.rotation = Quaternion.Euler(0, rotationY + 40, 0);
         }
-        
+
         else
         {
-            // ÇÃ·¹ÀÌ¾î°¡ Ä«¸Ş¶ó ¹æÇâÀ» µû¶ó È¸Àü
+            // í”Œë ˆì´ì–´ê°€ ì¹´ë©”ë¼ ë°©í–¥ì„ ë”°ë¼ íšŒì „
             player.rotation = Quaternion.Euler(0, rotationY, 0);
-        }        
+        }
     }
-    
 }
 
 

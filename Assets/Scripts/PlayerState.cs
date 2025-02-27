@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -16,19 +16,20 @@ public interface IState
 }
 public class PlayerState : MonoBehaviour
 {
-    //¾ê¸¸ ¹Ù²Ù¸é ½ºÅ©¸³Æ® ¹Ù²î°Ô ¤¡
+    //ì–˜ë§Œ ë°”ê¾¸ë©´ ìŠ¤í¬ë¦½íŠ¸ ë°”ë€Œê²Œ ã„±
     [SerializeField]
-    IState currentState;
+    public IState currentState;
 
-    //3DÇÃ·¹ÀÌ¾î ,2DÇÃ·¹ÀÌ¾î
+    //3Dí”Œë ˆì´ì–´ ,2Dí”Œë ˆì´ì–´
     public GameObject player;
     public GameObject paperPlayer;
 
-    //ÇÃ·¹ÀÌ¾î º¯È¯ÇÒ »óÅÂµé
+    //í”Œë ˆì´ì–´ ë³€í™˜í•  ìƒíƒœë“¤
     public StringState stringS = new StringState();
     public ThreeDState threeS = new ThreeDState();
     public TwoDState twoS = new TwoDState();
     public ZoomState zoomS = new ZoomState();
+    public SemiZoomState semiZoomS = new SemiZoomState();
 
     //Move
     public float moveSpeed;
@@ -42,18 +43,18 @@ public class PlayerState : MonoBehaviour
     public int jumpCount;
     public Rigidbody rb;
         
-    //3d¿¡¼­ 2d ,string ¿¡¼­ 2d ¸ğµå º¯È¯ ÇÒ¶§ °´Ã¼º¯°æ
+    //3dì—ì„œ 2d ,string ì—ì„œ 2d ëª¨ë“œ ë³€í™˜ í• ë•Œ ê°ì²´ë³€ê²½
     public bool isWall = false;
     public bool hasSpawned = false;
     public GameObject zoom;
     public GameObject crossHair;
 
     
-    // Ä«¸Ş¶ó ¹× UI °ü·Ã
+    // ì¹´ë©”ë¼ ë° UI ê´€ë ¨
     public CinemachineVirtualCamera[] cams;
     public GameObject scopeUI;
 
-    //string ¸ğµå
+    //string ëª¨ë“œ
     static bool isString = false;
     public bool ischlehddh = true;
     
@@ -79,6 +80,7 @@ public class PlayerState : MonoBehaviour
         }
         StringModeOnOff();
         HandleZoom();
+        HandleSemiZoom();
     }
     
     public void ChangeState(IState newState)
@@ -88,7 +90,17 @@ public class PlayerState : MonoBehaviour
             currentState.ExitState();
         }
         currentState = newState;
-        currentState.EnterState(this);        
+        currentState.EnterState(this);
+
+        if (newState is StringState)
+        {
+            player.transform.rotation = Quaternion.Euler(0, 110, 0);
+            player.transform.localScale = new Vector3(1, 1, 0.2f);
+        }
+        else
+        {
+            player.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 
     void StringModeOnOff()
@@ -98,7 +110,9 @@ public class PlayerState : MonoBehaviour
             if (jumpCount > 0 && Input.GetKey(KeyCode.LeftControl))
             {
                 ischlehddh = false;
-                anim.SetBool("IsFlying", true);                
+                anim.SetBool("IsFlying", true);
+                player.transform.localScale = new Vector3(1, 1, 0.2f);
+                player.transform.rotation = Quaternion.Euler(70, 0, 0);
                 rb.drag = 5f;
             }
             else
@@ -121,16 +135,23 @@ public class PlayerState : MonoBehaviour
     }
     void HandleZoom()
     {
-        if (Input.GetMouseButtonDown(1)) // ¿ìÅ¬¸¯
+        if (Input.GetMouseButtonDown(1)) // ìš°í´ë¦­
         {
             if (currentState is ZoomState)
             {
-                ChangeState(threeS); // ÁÜ »óÅÂÀÏ ¶§ ÇØÁ¦
+                ChangeState(threeS); // ì¤Œ ìƒíƒœì¼ ë•Œ í•´ì œ
             }
             else
             {
-                ChangeState(zoomS); // ÁÜ »óÅÂ·Î º¯°æ
+                ChangeState(zoomS); // ì¤Œ ìƒíƒœë¡œ ë³€ê²½
             }
+        }
+    }
+    void HandleSemiZoom()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && currentState is ThreeDState)
+        {
+            ChangeState(semiZoomS); // ğŸŸ¢ Shift ëˆ„ë¥´ë©´ ë°˜ì¤Œ ìƒíƒœë¡œ ë³€ê²½
         }
     }
 

@@ -1,35 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
-public class ZoomState : IState
+public class SemiZoomState : IState
 {
     PlayerState state;
-    Vector3 upDefaultPos;
+    private Vector3 defaultOffset;
+    private float defaultFOV;
 
     public void EnterState(PlayerState ply)
     {
         state = ply;
-        state.crossHair.gameObject.SetActive(false);
 
-        state.cams[0].Priority = 11;
-        state.cams[0].m_Lens.FieldOfView = 20f;
-        state.cams[0].m_Lens.NearClipPlane = 5.5f;
+        state.moveSpeed = 1.5f;
 
-        upDefaultPos = state.cams[0].transform.position;
 
-        state.player.transform.rotation = Quaternion.Euler(0, 40, 0);
-        state.moveSpeed = 1f;
+        state.cams[2].Priority = 11;
         state.anim.SetBool("IsZoom", true);
 
-        state.scopeUI.SetActive(true);
     }
 
-    public void UpdateState() { }
+    public void UpdateState()
+    {
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            state.ChangeState(state.threeS);
+        }
+    }
 
     public void ExitState()
     {
-        state.scopeUI.SetActive(false);
+        state.cams[2].Priority = 10;
         state.anim.SetBool("IsZoom", false);
     }
 
@@ -50,10 +52,15 @@ public class ZoomState : IState
         if (Input.GetKey(KeyCode.D)) moveDir += right;
 
         state.player.transform.position += moveDir * state.moveSpeed * Time.deltaTime;
-
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0))
         {
-            Camera.main.transform.position += new Vector3(0, Random.Range(-0.1f, 0.1f), 0);
+            state.anim.SetBool("IsShoot", true);
+            state.anim.SetBool("IsZoom", false);
+        }
+        else
+        {
+            state.anim.SetBool("IsShoot", false);
+            state.anim.SetBool("IsZoom", true);
         }
     }
 

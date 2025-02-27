@@ -8,8 +8,6 @@ public class Bullet : MonoBehaviour
 {
     private Vector3 _dir;
 
-    [SerializeField]
-    private float _speed = 3f;
 
     private IObjectPool<Bullet> _pool;
 

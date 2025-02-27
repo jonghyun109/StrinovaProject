@@ -10,8 +10,8 @@ public class StringState : IState
         state = ply;
         state.moveSpeed = 1.5f;
         state.cams[0].Priority = 11;
-        state.player.gameObject.transform.localScale = new Vector3(1, 1, 0.2f);
         state.player.gameObject.transform.rotation = Quaternion.Euler(0, 110, 0);
+        state.player.gameObject.transform.localScale = new Vector3(1, 1, 0.2f);
     }
 
     public void UpdateState()
