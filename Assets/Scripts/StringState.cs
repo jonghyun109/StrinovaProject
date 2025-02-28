@@ -10,18 +10,50 @@ public class StringState : IState
         state = ply;
         state.moveSpeed = 1.5f;
         state.cams[0].Priority = 11;
-        
+        state.anim.SetLayerWeight(1, 1);
+        state.anim.SetLayerWeight(2, 0);
     }
 
     public void UpdateState()
-    { 
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            state.anim.SetBool("IsLeftStep", true);
+            state.anim.SetBool("IsRightStep", false);
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            state.anim.SetBool("IsBackward", true);
+            state.anim.SetBool("IsWalk", false);
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            state.anim.SetBool("IsRightStep", true);
+            state.anim.SetBool("IsLeftStep", false);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            state.anim.SetBool("IsWalk", true);
+            state.anim.SetBool("IsBackward", false);
+        }
+        else
+        {
+            state.anim.SetBool("IsRightStep", false);
+            state.anim.SetBool("IsLeftStep", false); 
+            state.anim.SetBool("IsWalk", false);
+            state.anim.SetBool("IsBackward", false);
+            state.anim.SetTrigger("Idle");
+        }
     }
 
     public void ExitState()
     {
         state.cams[0].Priority = 10;
         state.player.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
-        state.player.gameObject.transform.localScale = new Vector3(1, 1, 1);
+        if (state.currentState is not StringState)
+        {
+            state.player.transform.localScale = Vector3.one;
+        }
     }
 
     public void Move()
@@ -54,6 +86,15 @@ public class StringState : IState
             direction += right;
         }
         state.player.transform.position += direction.normalized * state.moveSpeed * Time.deltaTime;
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            state.ChangeState(state.threeS);
+        }
+        //if(Input.GetKeyUp(KeyCode.LeftControl))
+        //{
+        //    state.ChangeState(state.threeS);
+        //}
     }
 
     public void Jump()

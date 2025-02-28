@@ -19,16 +19,41 @@ public class ThreeDState : IState
         state.player.gameObject.transform.localScale = new Vector3(1, 1, 1);
         state.player.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-        
+        state.anim.SetLayerWeight(1, 0);
+        state.anim.SetLayerWeight(2, 1);
+
         //state.crossHair.SetActive(true);
-        
+
     }
 
     public void UpdateState()
     {
-        if ((!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) &&
-           !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)))
+        if(Input.GetKey(KeyCode.W))
         {
+            state.anim.SetBool("IsRun", true);
+            state.anim.SetBool("IsBackward", false);
+        }
+        else if(Input.GetKey(KeyCode.S))
+        {
+            state.anim.SetBool("IsBackward", true);
+            state.anim.SetBool("IsRun", false);
+        }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            state.anim.SetBool("IsLeftStep", true);
+            state.anim.SetBool("IsRightStep", false);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            state.anim.SetBool("IsRightStep", true);
+            state.anim.SetBool("IsLeftStep", false);
+        }
+        else
+        {
+            state.anim.SetBool("IsRightStep", false);
+            state.anim.SetBool("IsLeftStep", false);
+            state.anim.SetBool("IsRun", false);
+            state.anim.SetBool("IsBackward", false);
             state.anim.SetTrigger("Idle");
         }
     }
@@ -89,25 +114,28 @@ public class ThreeDState : IState
 
         if (Input.GetMouseButtonDown(0))
         {
+            state.moveSpeed = 2f;
             //state.player.transform.rotation = Quaternion.Euler(0, 40, 0);
             state.anim.SetBool("IsShoot", true);
+
         }
         if (Input.GetMouseButtonUp(0))
         {
+            state.moveSpeed = 3f;
             //state.player.transform.rotation = Quaternion.identity;
             state.anim.SetTrigger("Idle");
             state.anim.SetBool("IsShoot", false);
         }
 
-        if (moveDirection != Vector3.zero)
-        {
-            state.player.transform.rotation = Quaternion.LookRotation(moveDirection);
-            state.anim.SetBool("IsWalk", true);
-        }
-        else
-        {
-            state.anim.SetBool("IsWalk", false);
-        }
+        //if (moveDirection != Vector3.zero)
+        //{
+        //    state.player.transform.rotation = Quaternion.LookRotation(moveDirection);
+        //    state.anim.SetBool("IsRun", true);
+        //}
+        //else
+        //{
+        //    state.anim.SetBool("IsRun", false);
+        //}
 
         state.player.transform.position += moveDirection * state.moveSpeed * Time.deltaTime;        
     }        

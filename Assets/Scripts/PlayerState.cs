@@ -20,6 +20,7 @@ public class PlayerState : MonoBehaviour
     [SerializeField]
     public IState currentState;
 
+    [Header("플레이어")]
     //3D플레이어 ,2D플레이어
     public GameObject player;
     public GameObject paperPlayer;
@@ -31,29 +32,34 @@ public class PlayerState : MonoBehaviour
     public ZoomState zoomS = new ZoomState();
     public SemiZoomState semiZoomS = new SemiZoomState();
 
+    [Header("움직임")]
     //Move
     public float moveSpeed;
     public float moveForward;
 
+    [Header("애니메이션")]
     //Animator
-    public Animator anim;    
+    public Animator anim;
 
+    [Header("점프")]
     //Jump(space)
     public float jumpHeight;
     public int jumpCount;
     public Rigidbody rb;
-        
+
+    [Header("")]
     //3d에서 2d ,string 에서 2d 모드 변환 할때 객체변경
     public bool isWall = false;
     public bool hasSpawned = false;
-    public GameObject zoom;
-    public GameObject crossHair;
 
-    
+    [Header("카메라, UI")]
+
     // 카메라 및 UI 관련
     public CinemachineVirtualCamera[] cams;
     public GameObject scopeUI;
+    public GameObject crossHair;
 
+    [Header("stringMode")]
     //string 모드
     static bool isString = false;
     public bool ischlehddh = true;
@@ -78,10 +84,8 @@ public class PlayerState : MonoBehaviour
             hasSpawned = false;
             ChangeState(twoS);
         }
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            StringModeOnOff();
-        }
+        
+        StringModeOnOff();        
         HandleZoom();
         HandleSemiZoom();
     }
@@ -102,25 +106,19 @@ public class PlayerState : MonoBehaviour
         }
         else
         {
-            player.transform.localScale = new Vector3(1, 1, 1);
+            player.transform.localScale = Vector3.one;
         }
     }
 
     void StringModeOnOff()
     {
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            if (currentState != stringS)
-            {
-                ChangeState(stringS);
-            }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {            
+            ChangeState(stringS);          
         }
         else if(Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            if (currentState != threeS) 
-            {
-                ChangeState(threeS);
-            }
+        {            
+            ChangeState(threeS);            
         }
     }
     void HandleZoom()

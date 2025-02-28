@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class GunFire : MonoBehaviour
 {
+    public GameObject StartButton;
     public GameObject muzzlePrefab;
     public GameObject muzzlePosition;
     public Camera maincam;
@@ -105,17 +106,23 @@ public class GunFire : MonoBehaviour
         {
             lastShotEnd = hit.point;
             shotDir = (hit.point - muzzlePosition.transform.position).normalized;
-
-            // ** 레이캐스트를 카메라 반동 값이 적용된 위치에서 쏘도록 수정 **
-            if (Camera.main != null)
+            if (hit.collider.CompareTag("StartTarget"))
             {
-                CameraController camController = Camera.main.GetComponent<CameraController>();
-                if (camController != null)
-                {
-                    float recoilFactor = camController.recoilY * 0.1f; // 반동 값 반영
-                    shotDir = Quaternion.Euler(-recoilFactor, recoilFactor, 0) * shotDir;
-                }
+                StartButton.SetActive(false);
+                Debug.Log("게임 시작");
+                hit.collider.GetComponent<GameStarter>().StartGame();
             }
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyHead"))
+            {
+                Debug.Log("헤드샷");
+                hit.collider.GetComponentInParent<Enemy>().TakeDamage(true);
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyBody"))
+            {
+                Debug.Log("바디샷");
+                hit.collider.GetComponentInParent<Enemy>().TakeDamage(false);
+            }
+           
             if (hit.collider.CompareTag("Enemy"))
             {
                 if (enemyHitEffectPrefab != null)

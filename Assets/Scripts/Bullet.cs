@@ -8,7 +8,6 @@ public class Bullet : MonoBehaviour
 {
     private Vector3 _dir;
 
-
     private IObjectPool<Bullet> _pool;
 
     public void SetPool(IObjectPool<Bullet> pool)
