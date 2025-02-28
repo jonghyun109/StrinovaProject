@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GameStarter : MonoBehaviour
 {
+    public GameObject etcs;
     public EnemyPool enemyPool;
     private bool gameStarted = false;
 
@@ -25,6 +26,7 @@ public class GameStarter : MonoBehaviour
         gameStarted = true;
         enemyPool.enabled = true;
 
-        enemyPool.SpawnFirstEnemy(); 
+        enemyPool.SpawnFirstEnemy();
+        etcs.SetActive(true);
     }
 }

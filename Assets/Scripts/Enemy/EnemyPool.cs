@@ -75,6 +75,7 @@ public class EnemyPool : MonoBehaviour
         enemy.transform.position = GetSpawnPosition();
         enemy.GetComponent<Enemy>().ResetEnemy();
         _pool.Release(enemy);
+        enemy.SetActive(true);
     }
 
 }
