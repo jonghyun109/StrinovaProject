@@ -10,12 +10,13 @@ public class GunFire : MonoBehaviour
     public GameObject muzzlePrefab;
     public GameObject muzzlePosition;
     public Camera maincam;
-    public GameObject bulletImpactPrefab;
-    public GameObject enemyHitEffectPrefab;
+
+    public GameObject bulletImpactPrefab; //벽 용)
+    public GameObject enemyHitEffectPrefab; // 적 전용
 
     public float shootDelay = 0.5f;
-    public float bulletSpeed = 20f; // 탄속 추가
-    
+    public float bulletSpeed = 20f;
+
     private Vector3 lastShotStart;
     private Vector3 lastShotEnd;
     Vector3 shotDir;
@@ -25,17 +26,20 @@ public class GunFire : MonoBehaviour
 
     [SerializeField] private float timeLastFired;
 
+    GameManager gameManager;
     private IObjectPool<Bullet> _pool;
 
     Ray ray;
+
     private void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
         _pool = new ObjectPool<Bullet>
-            (CreateBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet,maxSize:20);
+            (CreateBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet, maxSize: 20);
     }
 
     private Bullet CreateBullet()
-    {        
+    {
         Bullet bullet = Instantiate(muzzlePrefab, muzzlePosition.transform).GetComponent<Bullet>();
         if (bullet == null)
         {
@@ -45,6 +49,7 @@ public class GunFire : MonoBehaviour
         bullet.SetPool(_pool);
         return bullet;
     }
+
     private void OnGetBullet(Bullet bullet)
     {
         bullet.gameObject.SetActive(true);
@@ -63,36 +68,17 @@ public class GunFire : MonoBehaviour
     void Start()
     {
         timeLastFired = 0;
-
         maincam = Camera.main;
     }
 
     void Update()
     {
-        if(Input.GetMouseButton(0)&& ((timeLastFired + shootDelay) <= Time.time))
+        if (Input.GetMouseButton(0) && ((timeLastFired + shootDelay) <= Time.time))
         {
             timeLastFired = Time.time;
-            //Instantiate(muzzlePrefab, muzzlePosition.transform.position, muzzlePosition.transform.rotation, transform);
             var particle = _pool.Get();
             particle.Shoot(muzzlePosition.transform.position);
             ShootRayFromCamera();
-            ApplyRecoil();
-        }
-    }
-    //** 반동 적용 함수 추가 **//
-    void ApplyRecoil()
-    {
-        float recoilAmount = 1f; // 기본 반동 크기
-        float aimRecoilAmount = 0.3f; // 정조준 시 반동 감소
-
-        if (Camera.main != null)
-        {
-            CameraController camController = Camera.main.GetComponent<CameraController>();
-            if (camController != null)
-            {
-                bool isAiming = Input.GetMouseButton(1);
-                camController.ApplyCameraRecoil(isAiming ? aimRecoilAmount : recoilAmount);
-            }
         }
     }
 
@@ -106,42 +92,53 @@ public class GunFire : MonoBehaviour
         {
             lastShotEnd = hit.point;
             shotDir = (hit.point - muzzlePosition.transform.position).normalized;
+
             if (hit.collider.CompareTag("StartTarget"))
             {
-                StartButton.SetActive(false);
-                Debug.Log("게임 시작");
-                hit.collider.GetComponent<GameStarter>().StartGame();
-            }
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyHead"))
-            {
-                Debug.Log("헤드샷");
-                hit.collider.GetComponentInParent<Enemy>().TakeDamage(true);
-            }
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyBody"))
-            {
-                Debug.Log("바디샷");
-                hit.collider.GetComponentInParent<Enemy>().TakeDamage(false);
-            }
-           
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                if (enemyHitEffectPrefab != null)
+                gameManager.StartGame();
+                if (StartButton != null)
                 {
-                    GameObject hitEffect = Instantiate(enemyHitEffectPrefab, hit.point, Quaternion.identity);
-                    Destroy(hitEffect, 2f);
+                    StartButton.SetActive(false);
                 }
             }
-            else if (bulletImpactPrefab != null)
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyHead")) // 🆕 헤드샷 판정
             {
-                GameObject impact = Instantiate(bulletImpactPrefab, hit.point, Quaternion.LookRotation(hit.point));
-                Destroy(impact, 2f);
+                HandleEnemyHit(hit, true);
             }
-            
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyBody")) // 🆕 바디샷 판정
+            {
+                HandleEnemyHit(hit, false);
+            }
+            else // 적이 아닌 표면 (땅, 벽 등) 맞음
+            {
+                if (bulletImpactPrefab != null)
+                {
+                    GameObject impact = Instantiate(bulletImpactPrefab, hit.point, Quaternion.identity);
+                    Destroy(impact, 2f);
+                }
+            }
         }
         else
         {
             lastShotEnd = ray.origin + ray.direction * 100f;
-            shotDir = ray.direction; 
+            shotDir = ray.direction;
+        }
+    }
+
+    // 적 맞았을 때 처리하는 함수 (헤드샷 / 바디샷 구분)
+    private void HandleEnemyHit(RaycastHit hit, bool isHeadshot)
+    {
+        Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(isHeadshot);
+
+            // 적 맞았을 때만 피격 이펙트 실행
+            if (enemyHitEffectPrefab != null)
+            {
+                GameObject hitEffect = Instantiate(enemyHitEffectPrefab, hit.point, Quaternion.identity);
+                Destroy(hitEffect, 2f);
+            }
         }
     }
 

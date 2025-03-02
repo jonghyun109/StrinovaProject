@@ -5,6 +5,8 @@ using UnityEngine.Pool;
 
 public class EnemyPool : MonoBehaviour
 {
+    public bool randomSpawn = true;
+    private GameManager gameManager;
     public GameObject enemyPrefab; // 적 프리팹
     public int maxEnemies = 20; // 최대 적 개수
     private int activeEnemyCount = 0; // 현재 활성화된 적 개수
@@ -16,6 +18,7 @@ public class EnemyPool : MonoBehaviour
 
     void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
         //풀링
         _pool = new ObjectPool<GameObject>(
             CreateEnemy, OnGetEnemy, OnReleaseEnemy, OnDestroyEnemy, false, maxEnemies, maxEnemies);        
@@ -36,12 +39,12 @@ public class EnemyPool : MonoBehaviour
     //갖고있기
     private void OnGetEnemy(GameObject enemy)
     {
-        if (activeEnemyCount >= maxEnemies) return; // 최대 개수 초과 시 리턴
-
         enemy.SetActive(true);
         enemy.transform.position = GetSpawnPosition();
         enemy.GetComponent<Enemy>().ResetEnemy();
-        activeEnemyCount++;
+
+        // 적 개수 UI 업데이트
+        FindObjectOfType<GameManager>().UpdateEnemyCountUI();
     }
 
     private void OnReleaseEnemy(GameObject enemy)
@@ -54,20 +57,31 @@ public class EnemyPool : MonoBehaviour
     {
         Destroy(enemy);
     }
-        
+
     private Vector3 GetSpawnPosition()
     {
-        return new Vector3(
-            Random.Range(spawnAreaMin.x, spawnAreaMax.x),
-            Random.Range(spawnAreaMin.y, spawnAreaMax.y),
-            Random.Range(spawnAreaMin.z, spawnAreaMax.z)
-        );
+        if (randomSpawn)
+        {
+            return new Vector3(
+                Random.Range(spawnAreaMin.x, spawnAreaMax.x),
+                Random.Range(spawnAreaMin.y, spawnAreaMax.y),
+                Random.Range(spawnAreaMin.z, spawnAreaMax.z)
+            );
+        }
+        else
+        {
+            return new Vector3(spawnAreaMin.x, spawnAreaMin.y, spawnAreaMin.z);
+        }
     }
 
     // 게임이 시작되면 첫 번째 적 소환
     public void SpawnFirstEnemy()
-    {
-        _pool.Get();
+    {       
+        if(activeEnemyCount< maxEnemies)
+        {
+            _pool.Get();
+            activeEnemyCount++;
+        }        
     }
     //리스폰
     public void RespawnEnemy(GameObject enemy)
@@ -76,6 +90,7 @@ public class EnemyPool : MonoBehaviour
         enemy.GetComponent<Enemy>().ResetEnemy();
         _pool.Release(enemy);
         enemy.SetActive(true);
+       
     }
 
 }
