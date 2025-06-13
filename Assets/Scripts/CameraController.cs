@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour
 
     private float rotationX = 0f;
     private float rotationY = 0f;
-    private bool isShooting = false; // 총 쏘는 상태 체크
 
     public bool isPaused = false;
 

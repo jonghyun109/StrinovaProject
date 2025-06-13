@@ -24,8 +24,6 @@ public class GameManager : MonoBehaviour
     public Slider enemyCountSlider;
     public TextMeshProUGUI enemyCountTextUI; // 숫자 표시용
 
-    public Toggle randomSpawnToggle;
-
     private float elapsedTime = 0f;
     private int enemyCount;
     private bool gameStarted = false;
@@ -162,7 +160,6 @@ public class GameManager : MonoBehaviour
 
         mouseSensitivitySlider.value = cameraControllers[0].mouseSensitivity;
         enemyCountSlider.value = enemyPool.maxEnemies;
-        randomSpawnToggle.isOn = enemyPool.randomSpawn;
 
         // 슬라이더 옆 숫자 업데이트
         UpdateMouseSensitivityText(mouseSensitivitySlider.value);
@@ -177,7 +174,6 @@ public class GameManager : MonoBehaviour
         }
 
         enemyPool.maxEnemies = (int)enemyCountSlider.value;
-        enemyPool.randomSpawn = randomSpawnToggle.isOn;
 
         CloseSettings();
     }
