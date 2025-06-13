@@ -22,7 +22,6 @@ public class ThreeDState : IState
         state.anim.SetLayerWeight(1, 0);
         state.anim.SetLayerWeight(2, 1);
 
-        //state.crossHair.SetActive(true);
 
     }
 
@@ -70,7 +69,6 @@ public class ThreeDState : IState
     public void ExitState()
     {
         state.cams[0].Priority = 10;
-        //state.player.SetActive(false);
         state.anim.SetTrigger("Idle");
     }
 
@@ -84,10 +82,8 @@ public class ThreeDState : IState
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        // 이동 벡터 초기화
         Vector3 moveDirection = Vector3.zero;
 
-        // 입력에 따라 이동 방향 결정
         if (Input.GetKey(KeyCode.W))
         {
             moveDirection += cameraForward;
@@ -105,7 +101,6 @@ public class ThreeDState : IState
             moveDirection += cameraRight;
         }
 
-        // 이동 실행
         if (moveDirection != Vector3.zero)
         {
             moveDirection.Normalize();
@@ -115,69 +110,19 @@ public class ThreeDState : IState
         if (Input.GetMouseButtonDown(0))
         {
             state.moveSpeed = 2f;
-            //state.player.transform.rotation = Quaternion.Euler(0, 40, 0);
             state.anim.SetBool("IsShoot", true);
 
         }
         if (Input.GetMouseButtonUp(0))
         {
             state.moveSpeed = 3f;
-            //state.player.transform.rotation = Quaternion.identity;
             state.anim.SetTrigger("Idle");
             state.anim.SetBool("IsShoot", false);
         }
 
-        //if (moveDirection != Vector3.zero)
-        //{
-        //    state.player.transform.rotation = Quaternion.LookRotation(moveDirection);
-        //    state.anim.SetBool("IsRun", true);
-        //}
-        //else
-        //{
-        //    state.anim.SetBool("IsRun", false);
-        //}
 
         state.player.transform.position += moveDirection * state.moveSpeed * Time.deltaTime;        
     }        
 }
-    //Vector3 dir = (Input.GetKey(KeyCode.W) ? Vector3.forward : Vector3.zero) +
-    //              (Input.GetKey(KeyCode.S) ? Vector3.back : Vector3.zero) +
-    //              (Input.GetKey(KeyCode.A) ? Vector3.left : Vector3.zero) +
-    //              (Input.GetKey(KeyCode.D) ? Vector3.right : Vector3.zero);
-
-
-    //if (dir != Vector3.zero)
-    //{
-    //    if (state.ischlehddh == false)
-    //    {
-    //        state.player.transform.rotation = Quaternion.Euler(75, dir.y, dir.z);
-    //        state.player.gameObject.transform.localScale = new Vector3(1, 1, 0.2f);
-    //        //state.player.transform.rotation = Quaternion.LookRotation(new Vector3(75,-dir.y,-dir.z));
-    //    }
-    //    else
-    //    {
-    //        state.player.transform.rotation = Quaternion.LookRotation(dir);
-    //        state.anim.SetBool("IsWalk", true);
-    //    }
-    //}
-    //else
-    //{
-    //    state.anim.SetBool("IsWalk", false);
-    //}
-
-
-
     
-    //void UpdateCharacterRotation()
-    //{
-    //    // 카메라의 방향을 가져와서 y축만 반영
-    //    Vector3 cameraForward = state.threeDCam.transform.forward;
-    //    cameraForward.y = 0; // 수평 방향만 고려
-    //    cameraForward.Normalize();
-
-    //    // 캐릭터가 카메라를 등지도록 회전 설정
-    //    Quaternion currentRotation = state.player.transform.rotation;
-    //    Quaternion targetRotation = Quaternion.LookRotation(-cameraForward);
-    //    state.player.transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, Time.deltaTime * 5f);
-    //}
 

@@ -60,7 +60,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePauseMenu();
-            ToggleKeys();
         }
 
         if (isTimerRunning)
@@ -70,11 +69,6 @@ public class GameManager : MonoBehaviour
             int seconds = Mathf.FloorToInt(elapsedTime % 60);
             timerText.text = $"Time: {elapsedTime:F2}";
         }
-    }
-    void ToggleKeys()
-    {
-        isKeysActive = !isKeysActive; //** 상태 반전
-        Keys.SetActive(isKeysActive);
     }
     public void StartGame()
     {
@@ -186,7 +180,7 @@ public class GameManager : MonoBehaviour
     // 슬라이더 값 변경 시 숫자 업데이트
     public void UpdateMouseSensitivityText(float value)
     {
-        mouseSensitivityText.text = value.ToString("F1");
+        mouseSensitivityText.text = value.ToString();
     }
 
     public void UpdateEnemyCountText(float value)

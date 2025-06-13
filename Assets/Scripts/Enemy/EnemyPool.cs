@@ -43,7 +43,6 @@ public class EnemyPool : MonoBehaviour
         enemy.transform.position = GetSpawnPosition();
         enemy.GetComponent<Enemy>().ResetEnemy();
 
-        // 적 개수 UI 업데이트
         FindObjectOfType<GameManager>().UpdateEnemyCountUI();
     }
 

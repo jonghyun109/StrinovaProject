@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class KeyDisplayUI : MonoBehaviour
 {
-    public Button wKey, aKey, sKey, dKey, ctrlKey, shiftKey; //** UI 버튼들
-    private Dictionary<KeyCode, Button> keyMappings; //** 키와 버튼 매핑
+    public Button wKey, aKey, sKey, dKey, ctrlKey, shiftKey; // UI 버튼들
+    private Dictionary<KeyCode, Button> keyMappings; // 키와 버튼 매핑
 
-    private Color defaultColor = Color.gray; //** 기본 색상
-    private Color pressedColor = Color.blue; //** 눌렀을 때 색상
+    private Color defaultColor = Color.gray; // 기본 색상
+    private Color pressedColor = Color.blue; // 눌렀을 때 색상
 
     void Start()
     {
@@ -35,11 +35,11 @@ public class KeyDisplayUI : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
-                SetButtonColor(keyMappings[key], pressedColor); //** 키를 누르면 색 변경
+                SetButtonColor(keyMappings[key], pressedColor); // 키를 누르면 색 변경
             }
             if (Input.GetKeyUp(key))
             {
-                SetButtonColor(keyMappings[key], defaultColor); //** 키를 떼면 원래 색으로 복귀
+                SetButtonColor(keyMappings[key], defaultColor);
             }
         }
     }
