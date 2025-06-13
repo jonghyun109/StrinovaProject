@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject Keys;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI enemyCountText;
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     private bool gameStarted = false;
     private bool isPaused = false;
     private bool isTimerRunning = false;
+    private bool isKeysActive = true;
 
     private EnemyPool enemyPool;
     private CameraController cameraController;
@@ -60,6 +62,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePauseMenu();
+            ToggleKeys();
         }
 
         if (isTimerRunning)
@@ -70,7 +73,11 @@ public class GameManager : MonoBehaviour
             timerText.text = $"Time: {elapsedTime:F2}";
         }
     }
-
+    void ToggleKeys()
+    {
+        isKeysActive = !isKeysActive; //** 상태 반전
+        Keys.SetActive(isKeysActive);
+    }
     public void StartGame()
     {
         if (!gameStarted)
@@ -127,7 +134,7 @@ public class GameManager : MonoBehaviour
         escMenu.SetActive(isPaused);
 
         if (isPaused)
-        {
+        {            
             Time.timeScale = 0;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
